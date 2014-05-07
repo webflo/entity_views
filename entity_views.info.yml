@@ -1,0 +1,5 @@
+name: 'Entity Views'
+type: module
+description: 'Provides a generic set of views plugins.'
+core: 8.x
+version: VERSION
