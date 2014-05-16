@@ -32,7 +32,7 @@ class LinkDelete extends Link {
    */
   protected function renderLink($entity, ResultRow $values) {
     // Ensure user has access to delete this node.
-    if (!$entity->access('delete')) {
+    if ($entity && $entity->access('delete')) {
       $this->options['alter']['make_link'] = TRUE;
       $this->options['alter']['path'] = $entity->getSystemPath('delete-form');
       $this->options['alter']['query'] = drupal_get_destination();
