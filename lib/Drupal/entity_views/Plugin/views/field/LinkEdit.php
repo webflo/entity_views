@@ -6,6 +6,7 @@
  */
 
 namespace Drupal\entity_views\Plugin\views\field;
+
 use Drupal\views\ResultRow;
 
 /**
