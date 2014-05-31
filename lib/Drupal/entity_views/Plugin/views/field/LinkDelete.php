@@ -14,7 +14,7 @@ use Drupal\views\ResultRow;
  *
  * @ingroup views_field_handlers
  *
- * @PluginID("entity_link_delete")
+ * @ViewsField("entity_link_delete")
  */
 class LinkDelete extends Link {
 
