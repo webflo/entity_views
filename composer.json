@@ -1,0 +1,8 @@
+{
+  "name": "drupal/entity_views",
+  "description": "Provides a generic set of views plugins.",
+  "type": "drupal-module",
+  "license": "GPL-2.0+",
+  "minimum-stability": "dev",
+  "require": { }
+}
