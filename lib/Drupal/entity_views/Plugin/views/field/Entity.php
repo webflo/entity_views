@@ -7,8 +7,8 @@
 
 namespace Drupal\entity_views\Plugin\views\field;
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
-use Drupal\views\Plugin\views\field\MachineName;
 use Drupal\views\ResultRow;
 
 /**
@@ -31,7 +31,7 @@ class Entity extends FieldPluginBase {
     return $options;
   }
 
-  public function buildOptionsForm(&$form, &$form_state) {
+  public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     $options = array(
       'label' => t('Show entity label'),
       'id' => t('Show entity ID'),
