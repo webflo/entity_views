@@ -1,0 +1,4 @@
+services:
+  entity.autocomplete:
+    class: Drupal\entity_views\EntityAutocomplete
+    arguments: ['@entity.manager', '@entity.query']

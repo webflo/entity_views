@@ -1,0 +1,6 @@
+system.entity_autocomplete:
+  path: '/entity_autocomplete/{entity_type}'
+  defaults:
+    _controller: '\Drupal\entity_views\Controller\EntityAutocompleteController::autocompleteEntity'
+  requirements:
+    _access: 'TRUE'
