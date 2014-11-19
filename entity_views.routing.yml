@@ -1,6 +1,20 @@
-system.entity_autocomplete:
-  path: '/entity_autocomplete/{entity_type}'
+system.entity_autocomplete.id:
+  path: '/entity_autocomplete/{entity_type}/id'
   defaults:
-    _controller: '\Drupal\entity_views\Controller\EntityAutocompleteController::autocompleteEntity'
+    _controller: '\Drupal\entity_views\Controller\EntityAutocompleteController::autocompleteEntityId'
+  requirements:
+    _access: 'TRUE'
+
+system.entity_autocomplete.uuid:
+  path: '/entity_autocomplete/{entity_type}/uuid'
+  defaults:
+    _controller: '\Drupal\entity_views\Controller\EntityAutocompleteController::autocompleteEntityUuid'
+  requirements:
+    _access: 'TRUE'
+
+system.entity_autocomplete.labelid:
+  path: '/entity_autocomplete/{entity_type}/labelid'
+  defaults:
+    _controller: '\Drupal\entity_views\Controller\EntityAutocompleteController::autocompleteEntityLabelWithId'
   requirements:
     _access: 'TRUE'

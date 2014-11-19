@@ -62,7 +62,7 @@ class Entity extends EntityBase {
       '#description' => $this->t('You can put in either the entity ID or the UUID'),
       '#type' => 'textfield',
       '#default_value' => $this->options['entity_id'],
-      '#autocomplete_route_name' => 'system.entity_autocomplete',
+      '#autocomplete_route_name' => 'system.entity_autocomplete.uuid',
       '#autocomplete_route_parameters' => ['entity_type' => $this->entityType],
     );
   }
