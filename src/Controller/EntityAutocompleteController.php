@@ -45,45 +45,14 @@ class EntityAutocompleteController extends ControllerBase {
    *   A JSON response containing the autocomplete suggestions for existing
    *   entities.
    *
-   * @see \Drupal\entity_views\EntityAutocomplete::getMatchesUuid()
-   */
-  public function autocompleteEntityUuid($entity_type, Request $request) {
-    return new JsonResponse($this->entityAutocomplete->getMatchesUuid($request->query->get('q'), $entity_type, $request->query->get('page')));
-  }
-
-  /**
-   * Returns response for the entity autocompletion.
-   *
-   * @param string $entity_type
-   *   The entity type.
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   The current request object containing the search string.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   A JSON response containing the autocomplete suggestions for existing
-   *   entities.
-   *
    * @see \Drupal\entity_views\EntityAutocomplete::getMatchesId()
    */
-  public function autocompleteEntityId($entity_type, Request $request) {
-    return new JsonResponse($this->entityAutocomplete->getMatchesId($request->query->get('q'), $entity_type, $request->query->get('page')));
-  }
-
-  /**
-   * Returns response for the entity autocompletion.
-   *
-   * @param string $entity_type
-   *   The entity type.
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   The current request object containing the search string.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   A JSON response containing the autocomplete suggestions for existing
-   *   entities.
-   *
-   * @see \Drupal\entity_views\EntityAutocomplete::getMatchesCombined()
-   */
-  public function autocompleteEntityLabelWithId($entity_type, Request $request) {
-    return new JsonResponse($this->entityAutocomplete->getMatchesCombined($request->query->get('q'), $entity_type, $request->query->get('page')));
+  public function autocomplete($entity_type, $label_callback, $value_callback, Request $request) {
+    return new JsonResponse($this->entityAutocomplete->getMatches(
+      $request->query->get('q'),
+      $entity_type,
+      $value_callback,
+      $label_callback,
+      $request->query->get('page')));
   }
 }

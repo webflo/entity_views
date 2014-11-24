@@ -1,20 +1,26 @@
 system.entity_autocomplete.id:
   path: '/entity_autocomplete/{entity_type}/id'
   defaults:
-    _controller: '\Drupal\entity_views\Controller\EntityAutocompleteController::autocompleteEntityId'
+    _controller: '\Drupal\entity_views\Controller\EntityAutocompleteController::autocomplete'
+    value_callback: '\Drupal\entity_views\EntityAutocomplete::getEntityId'
+    label_callback: '\Drupal\entity_views\EntityAutocomplete::getEntityLabel'
   requirements:
     _access: 'TRUE'
 
 system.entity_autocomplete.uuid:
   path: '/entity_autocomplete/{entity_type}/uuid'
   defaults:
-    _controller: '\Drupal\entity_views\Controller\EntityAutocompleteController::autocompleteEntityUuid'
+    _controller: '\Drupal\entity_views\Controller\EntityAutocompleteController::autocomplete'
+    value_callback: '\Drupal\entity_views\EntityAutocomplete::getEntityUuid'
+    label_callback: '\Drupal\entity_views\EntityAutocomplete::getEntityLabel'
   requirements:
     _access: 'TRUE'
 
 system.entity_autocomplete.labelid:
   path: '/entity_autocomplete/{entity_type}/labelid'
   defaults:
-    _controller: '\Drupal\entity_views\Controller\EntityAutocompleteController::autocompleteEntityLabelWithId'
+    _controller: '\Drupal\entity_views\Controller\EntityAutocompleteController::autocomplete'
+    value_callback: '\Drupal\entity_views\EntityAutocomplete::getEntityId'
+    label_callback: '\Drupal\entity_views\EntityAutocomplete::getEntityLabelWithId'
   requirements:
     _access: 'TRUE'

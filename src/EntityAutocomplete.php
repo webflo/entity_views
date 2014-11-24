@@ -74,27 +74,6 @@ class EntityAutocomplete {
   }
 
   /**
-   * Get matches for the autocompletion of entity labels, using UUIDs as values.
-   *
-   * The number of results is limited to 10.
-   *
-   * @param string $string
-   *   The string to match for usernames.
-   * @param $entity_type_id
-   *   The entity type.
-   * @param int $page
-   *   The results page number.
-   *
-   * @return array
-   *   An array containing the matching entities.
-   */
-  public function getMatchesUuid($string, $entity_type_id, $page = 1) {
-    return $this->getMatches($string, $entity_type_id,
-      array(__CLASS__, 'getEntityUuid'),
-      array(__CLASS__, 'getEntityLabel'), $page);
-  }
-
-  /**
    * Get matches for the autocompletion of entity labels.
    *
    * The number of results is limited to 10.
@@ -121,7 +100,7 @@ class EntityAutocomplete {
       // Inject paging information: JS assumes that it gets only 10 results; if
       // we have we more than 10 results, we return an eleventh result to
       // indicate that more can be loaded.
-      $page = $page < 0 ? 0 : $page;
+      $page = $page < 1 ? 1 : $page;
       $query->range(($page - 1) * 10, 11);
 
       // Load entities and match each into a value/label pair.
@@ -129,10 +108,7 @@ class EntityAutocomplete {
       foreach ($entities as $entity) {
         /** @var \Drupal\Core\Entity\EntityInterface $entity */
         if ($entity->access('view')) {
-          $matches[] = array(
-            'value' => call_user_func($value_callback, $entity),
-            'label' => call_user_func($label_callback, $entity),
-          );
+          $matches[] = $this->getMatchEntry($entity, $value_callback, $label_callback);
         }
       }
     }
@@ -167,47 +143,22 @@ class EntityAutocomplete {
   }
 
   /**
-   * Get matches for the autocompletion of entity labels, using a combination of
-   * the label and the id as values.
+   * Build a value-label pair for the given entity, using the supplied
+   * callbacks.
    *
-   * The value format is "@label (@id)".
-   *
-   * The number of results is limited to 10.
-   *
-   * @param string $string
-   *   The string to match for usernames.
-   * @param $entity_type_id
-   *   The entity type.
-   * @param int $page
-   *   The results page number.
-   *
+   * @param EntityInterface $entity
+   *   The entity to build the entry for.
+   * @param callable $value_callback
+   *   The value callback.
+   * @param callable $label_callback
+   *   The label callback.
    * @return array
-   *   An array containing the matching entities.
+   *   An array with at least two keys: 'value' and 'label'.
    */
-  public function getMatchesCombined($string, $entity_type_id, $page = 1) {
-    return $this->getMatches($string, $entity_type_id,
-      array(__CLASS__, 'getEntityLabelWithId'),
-      array(__CLASS__, 'getEntityLabel'), $page);
-  }
-
-  /**
-   * Get matches for the autocompletion of entity labels, using IDs as values.
-   *
-   * The number of results is limited to 10.
-   *
-   * @param string $string
-   *   The string to match for usernames.
-   * @param $entity_type_id
-   *   The entity type.
-   * @param int $page
-   *   The results page number.
-   *
-   * @return array
-   *   An array containing the matching entities.
-   */
-  public function getMatchesId($string, $entity_type_id, $page = 1) {
-    return $this->getMatches($string, $entity_type_id,
-      array(__CLASS__, 'getEntityId'),
-      array(__CLASS__, 'getEntityLabel'), $page);
+  public function getMatchEntry(EntityInterface $entity, callable $value_callback, callable $label_callback) {
+    return array(
+      'value' => call_user_func($value_callback, $entity),
+      'label' => call_user_func($label_callback, $entity),
+    );
   }
 }
