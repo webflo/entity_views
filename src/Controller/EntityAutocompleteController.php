@@ -48,7 +48,7 @@ class EntityAutocompleteController extends ControllerBase {
    * @see \Drupal\entity_views\EntityAutocomplete::getMatchesUuid()
    */
   public function autocompleteEntityUuid($entity_type, Request $request) {
-    return new JsonResponse($this->entityAutocomplete->getMatchesUuid($request->query->get('q'), $entity_type));
+    return new JsonResponse($this->entityAutocomplete->getMatchesUuid($request->query->get('q'), $entity_type, $request->query->get('page')));
   }
 
   /**
@@ -66,7 +66,7 @@ class EntityAutocompleteController extends ControllerBase {
    * @see \Drupal\entity_views\EntityAutocomplete::getMatchesId()
    */
   public function autocompleteEntityId($entity_type, Request $request) {
-    return new JsonResponse($this->entityAutocomplete->getMatchesId($request->query->get('q'), $entity_type));
+    return new JsonResponse($this->entityAutocomplete->getMatchesId($request->query->get('q'), $entity_type, $request->query->get('page')));
   }
 
   /**
@@ -84,6 +84,6 @@ class EntityAutocompleteController extends ControllerBase {
    * @see \Drupal\entity_views\EntityAutocomplete::getMatchesCombined()
    */
   public function autocompleteEntityLabelWithId($entity_type, Request $request) {
-    return new JsonResponse($this->entityAutocomplete->getMatchesCombined($request->query->get('q'), $entity_type));
+    return new JsonResponse($this->entityAutocomplete->getMatchesCombined($request->query->get('q'), $entity_type, $request->query->get('page')));
   }
 }

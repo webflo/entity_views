@@ -76,21 +76,28 @@ class EntityAutocomplete {
   /**
    * Get matches for the autocompletion of entity labels, using UUIDs as values.
    *
+   * The number of results is limited to 10.
+   *
    * @param string $string
    *   The string to match for usernames.
    * @param $entity_type_id
    *   The entity type.
+   * @param int $page
+   *   The results page number.
    *
    * @return array
    *   An array containing the matching entities.
    */
-  public function getMatchesUuid($string, $entity_type_id) {
+  public function getMatchesUuid($string, $entity_type_id, $page = 1) {
     return $this->getMatches($string, $entity_type_id,
-      array(__CLASS__, 'getEntityUuid'), array(__CLASS__, 'getEntityLabel'));
+      array(__CLASS__, 'getEntityUuid'),
+      array(__CLASS__, 'getEntityLabel'), $page);
   }
 
   /**
    * Get matches for the autocompletion of entity labels.
+   *
+   * The number of results is limited to 10.
    *
    * @param string $string
    *   The string to match for entity labels.
@@ -98,17 +105,27 @@ class EntityAutocomplete {
    *   The entity type.
    * @param callable $value_callback
    * @param callable $label_callback
+   * @param int $page
+   *   The results page number.
    *
    * @return array
    *   An array containing the matching entities.
    */
-  public function getMatches($string, $entity_type_id, callable $value_callback, callable $label_callback) {
+  public function getMatches($string, $entity_type_id, callable $value_callback, callable $label_callback, $page = 1) {
     $matches = [];
     if ($string) {
       $entity_type = $this->entityManager->getDefinition($entity_type_id);
       $entity_storage = $this->entityManager->getStorage($entity_type_id);
-      $entity_ids = $this->getQuery($string, $entity_type)->execute();
-      $entities = $entity_storage->loadMultiple($entity_ids);
+      $query = $this->getQuery($string, $entity_type);
+
+      // Inject paging information: JS assumes that it gets only 10 results; if
+      // we have we more than 10 results, we return an eleventh result to
+      // indicate that more can be loaded.
+      $page = $page < 0 ? 0 : $page;
+      $query->range(($page - 1) * 10, 11);
+
+      // Load entities and match each into a value/label pair.
+      $entities = $entity_storage->loadMultiple($query->execute());
       foreach ($entities as $entity) {
         /** @var \Drupal\Core\Entity\EntityInterface $entity */
         if ($entity->access('view')) {
@@ -146,8 +163,7 @@ class EntityAutocomplete {
     }
     return $this->entityQuery->get($entity_type->id())
       ->condition($entity_label_key, $string, 'CONTAINS')
-      ->accessCheck(TRUE)
-      ->range(0, 10);
+      ->accessCheck(TRUE);
   }
 
   /**
@@ -156,33 +172,42 @@ class EntityAutocomplete {
    *
    * The value format is "@label (@id)".
    *
+   * The number of results is limited to 10.
+   *
    * @param string $string
    *   The string to match for usernames.
    * @param $entity_type_id
    *   The entity type.
+   * @param int $page
+   *   The results page number.
    *
    * @return array
    *   An array containing the matching entities.
    */
-  public function getMatchesCombined($string, $entity_type_id) {
+  public function getMatchesCombined($string, $entity_type_id, $page = 1) {
     return $this->getMatches($string, $entity_type_id,
       array(__CLASS__, 'getEntityLabelWithId'),
-      array(__CLASS__, 'getEntityLabel'));
+      array(__CLASS__, 'getEntityLabel'), $page);
   }
 
   /**
    * Get matches for the autocompletion of entity labels, using IDs as values.
    *
+   * The number of results is limited to 10.
+   *
    * @param string $string
    *   The string to match for usernames.
    * @param $entity_type_id
    *   The entity type.
+   * @param int $page
+   *   The results page number.
    *
    * @return array
    *   An array containing the matching entities.
    */
-  public function getMatchesId($string, $entity_type_id) {
+  public function getMatchesId($string, $entity_type_id, $page = 1) {
     return $this->getMatches($string, $entity_type_id,
-      array(__CLASS__, 'getEntityId'), array(__CLASS__, 'getEntityLabel'));
+      array(__CLASS__, 'getEntityId'),
+      array(__CLASS__, 'getEntityLabel'), $page);
   }
 }
